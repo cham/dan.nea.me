@@ -8,96 +8,67 @@ html, body {
     height: 100%;
 }
 body {
+    font-family: sans-serif;
     background: #000;
 }
-.tile-nav,
-.tile-nav--title,
-.tile-nav--type {
-    margin: 0;
-    padding: 3px;
+.vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    box-shadow: inset 0 0 110px #000;
+    cursor: pointer;
 }
-.tile-nav--title,
-.tile-nav--type {
-    letter-spacing: -1px;
+.tinyheader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 25px;
+    background: black;
+    z-index: 100;
+}
+.site-name {
     color: #fff;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-weight: normal;
+    letter-spacing: -1px;
+    float: right;
+    margin: 0;
+    padding: 3px 6px;
 }
-.tile-nav {
-    text-align: center;
-    margin: 24px;
+.site-nav {
+    padding: 0;
+    margin: 0;
 }
-.tile-nav--tile {
+.site-nav--item {
     display: inline-block;
-    vertical-align: top;
-    width: 320px;
-    height: 160px;
+    margin: 0 10px;
     list-style-type: none;
-    text-align: left;
-    position: relative;
+    margin: 0;
+    padding: 0;
 }
-.tile-nav--link {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+.site-nav--link {
+    color: #999;
     text-decoration: none;
-    color: inherit;
-    z-index: 1
+    letter-spacing: -1px;
+    display: inline-block;
+    background: black;
+    padding: 3px 6px;
 }
-.tile-nav--background {
+.site-nav--link:hover,
+.site-nav--link.active {
+    color: white;
+}
+.site-name,
+.site-nav--link {
+    font-size: 16px;
+}
+.site-content {
     position: absolute;
-    top: 0;
+    top: 25px;
     left: 0;
-    bottom: 0;
     right: 0;
-    z-index: -1;
-    background-color: #333;
-    background-position: center center;
-    background-size: 100%;
-    transition: background-size 0.2s ease-out;
-}
-.tile-nav--link:hover .tile-nav--background {
-    background-size: 130%;
-}
-.tile-webgl {
-    background-image: url(../img/tile-backgrounds/webgl-talk.png);
-}
-.tile-audioterrain {
-    background-image: url(../img/tile-backgrounds/audioterrain.png);
-}
-.tile-reflection {
-    background-image: url(../img/tile-backgrounds/reflection.png);
-}
-.tile-particlebox {
-    background-image: url(../img/tile-backgrounds/particlebox.png);
-}
-.tile-voxel-castle {
-    background-image: url(../img/tile-backgrounds/voxel-castle.png);
-}
-.tile-pushconf {
-    background-image: url(../img/tile-backgrounds/push-conference.jpg);
-}
-.tile-earth {
-    background-image: url(../img/tile-backgrounds/earth.png);
-}
-.tile-leap-physics {
-    background-image: url(../img/tile-backgrounds/leap-physics.png);
-}
-.tile-leap {
-    background-image: url(../img/tile-backgrounds/leap.png);
-}
-.tile-gravity {
-    background-image: url(../img/tile-backgrounds/gravity.png);
-}
-.tile-gauntlet {
-    background-image: url(../img/tile-backgrounds/gauntlet.png);
-}
-.slider-vis {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: -1;
+    border: 0;
 }

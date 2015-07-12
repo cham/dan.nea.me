@@ -33,17 +33,42 @@ canvas.className = 'slider-vis';
 
 var ctx = canvas.getContext('2d');
 var blocksize = 20;
-var blockcolours = [
-    '#111',
-    '#111',
-    '#111',
-    '#111',
-    '#111',
-    '#222',
-    '#222',
-    '#cc0',
-    '#c00'
+var coloursets = [
+    [
+        '#111',
+        '#111',
+        '#111',
+        '#111',
+        '#111',
+        '#222',
+        '#222',
+        '#cc0',
+        '#c00'
+    ],
+    [
+        '#111',
+        '#111',
+        '#111',
+        '#111',
+        '#111',
+        '#222',
+        '#222',
+        '#c0c',
+        '#cc0'
+    ],
+    [
+        '#111',
+        '#111',
+        '#111',
+        '#111',
+        '#111',
+        '#222',
+        '#222',
+        '#0cc',
+        '#00c'
+    ]
 ];
+var blockcolours = coloursets[Math.floor(Math.random() * coloursets.length)];
 
 function draw(){
     var numcols = Math.ceil(w / blocksize),
@@ -57,19 +82,22 @@ function draw(){
     }
 }
 
-function moveSquare(){
-    var col = Math.floor(Math.random() * Math.ceil(w / blocksize));
-    var row = Math.floor(Math.random() * Math.ceil(h / blocksize));
-    var startX = col * blocksize;
-    var startY = row * blocksize;
+function moveSquare(options){
+    options = options || {};
+
+    var col = options.col || Math.floor(Math.random() * Math.ceil(w / blocksize));
+    var row = options.row || Math.floor(Math.random() * Math.ceil(h / blocksize));
+    var startX = options.x || col * blocksize;
+    var startY = options.y || row * blocksize;
     var copyData = ctx.getImageData(startX, startY, blocksize, blocksize);
-    var frames = 10;
-    var framesleft = 10;
+    var frames = options.numframes || 10;
+    var framesleft = frames;
     var moveBy = 0;
     var direction = Math.floor(Math.random() * 8);
+    var pixelsperframe = options.speed || 1;
 
     function doMove(){
-        moveBy = Math.floor(((frames - framesleft) / frames) * blocksize);
+        moveBy = Math.floor(((frames - framesleft) / frames) * blocksize * pixelsperframe);
         switch(direction){
         case 7:
             ctx.putImageData(copyData, startX + moveBy, startY);
@@ -104,13 +132,58 @@ function moveSquare(){
     doMove();
 }
 
-draw();
+var mouseIsDown = false;
+var lastTick = Date.now();
+var debounceMs = 50;
+
+function mouseDownCanvas(){
+    mouseIsDown = true;
+}
+
+function mouseUpCanvas(){
+    mouseIsDown = false;
+}
+
+function checkDebounce(){
+    var now = Date.now();
+    if(now - debounceMs < lastTick){
+        return false;
+    }
+    lastTick = now;
+    return true;
+}
+
+function fireSquares(x, y, times){
+    for(var i = 0; i < times; i++){
+        var speed = Math.ceil(Math.random() * 4);
+        moveSquare({
+            col: Math.floor(x / blocksize),
+            row: Math.floor(y / blocksize),
+            speed: speed,
+            numframes: speed * 10
+        });
+    }
+}
+
+function mouseMoveCanvas(e){
+    if(!mouseIsDown || !checkDebounce()){
+        return;
+    }
+    fireSquares(e.pageX, e.pageY, 3);
+}
+
+function touchMoveCanvas(e){
+    if(!checkDebounce()){
+        return;
+    }
+    e.preventDefault();
+    fireSquares(e.pageX, e.pageY, 3);
+}
 
 function animloop(){
     requestAnimFrame(animloop);
     moveSquare();
 }
-requestAnimFrame(animloop);
 
 window.onresize = function(){
     wSize = windowSize();
@@ -121,4 +194,11 @@ window.onresize = function(){
     draw();
 };
 
+document.body.addEventListener('mousedown', mouseDownCanvas);
+document.body.addEventListener('mouseup', mouseUpCanvas);
+document.body.addEventListener('mousemove', mouseMoveCanvas);
+document.body.addEventListener('touchmove', touchMoveCanvas);
 document.body.appendChild(canvas);
+
+draw();
+requestAnimFrame(animloop);
